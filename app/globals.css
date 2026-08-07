@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+/*
+ * Certus design tokens — derived from design/DESIGN_SYSTEM.md ("Die Akte").
+ * Light-only. Office-paper grey-white, ink ruling, one construction-safety accent.
+ */
+@theme {
+  --color-paper: #f2f1ed;
+  --color-surface: #ffffff;
+  --color-ink: #1b2024;
+  --color-ink-2: #5a636b;
+  --color-ink-3: #8a929a;
+  --color-rule: #d9dcd9;
+  /* Accent deepened from #E4572E to #C2410C: the original value fails WCAG AA
+     (3.68:1) for normal-size text and white-on-accent. #C2410C is the AA-safe
+     construction-safety orange (>=4.5:1 on white, paper and accent-bg; white
+     text on it >=4.5:1). Kept as a single token so all usages stay consistent. */
+  --color-accent: #c2410c;
+  --color-ko: #b8302b;
+  /* warn deepened from #A66A00 to #8A5A00 for AA on warn-bg (>=4.5:1). */
+  --color-warn: #8a5a00;
+  --color-ok: #2e6e4e;
+  --color-info: #3a6a8c;
+  --color-ko-bg: #f9e9e6;
+  --color-warn-bg: #fbf2df;
+  --color-ok-bg: #e8f2ea;
+  --color-accent-bg: #fdf0ea; /* lightened from #FBE9E2 so accent text on it reaches >=4.5:1 */
+  /* ink-3 deepened from #8A929A to #5F6871 for AA on white/paper (>=4.5:1). */
+  --color-ink-3: #5f6871;
+
+  --font-sans: "Fira Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-condensed: "Fira Sans Condensed", "Fira Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fira Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings set tighter line breaks like a well-set document heading. */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--color-accent-bg);
+  color: var(--color-ink);
+}
+
+/* Accessibility floor: visible 2px accent focus ring everywhere. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Design-system typography helpers */
+.eyebrow {
+  font-family: var(--font-condensed);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Motion: reduced-motion disables transform/opacity animation. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Signature: the Firmenstempel (rubber stamp).
+   In Austrian tendering a bid only becomes binding when it is
+   stamped. The waitlist borrows that ceremony: the pre-launch
+   page presents itself as a draft ("ENTWURF") and the signup
+   confirmation stamps the registration ("ANGEMELDET").
+   Double-ring border, condensed uppercase, slight rotation —
+   per design/DESIGN_SYSTEM.md §5.
+   ============================================================ */
+.stamp {
+  display: inline-block;
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  line-height: 1.15;
+  white-space: nowrap;
+  padding: 0.32em 0.85em 0.28em;
+  border: 2px solid currentColor;
+  outline: 1px solid currentColor;
+  outline-offset: 3px;
+}
+
+.stamp--rotate {
+  transform: rotate(-6deg);
+}
+
+@keyframes stamp-in {
+  0% {
+    transform: rotate(-6deg) scale(1.45);
+    opacity: 0;
+  }
+  55% {
+    transform: rotate(-4.5deg) scale(0.94);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-6deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.stamp--in {
+  animation: stamp-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Load-in for the hero sheet (document lines + stamp). */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 360ms ease-out both;
+}
+
+/* Opacity-only reveal for elements whose transform must not be
+   overridden (e.g. the rotated stamp). */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 240ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp--in,
+  .rise,
+  .fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

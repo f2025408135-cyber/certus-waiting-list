@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "lib/db.ts",
+    "lib/validation.ts",
+    "lib/rate-limit.ts",
+    "lib/csv.ts",
+    "app/api/waitlist/route.ts",
+    "app/api/waitlist/export/route.ts"
+  ]
+}
